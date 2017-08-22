@@ -29,7 +29,7 @@ public class MealServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
         mealController = springContext.getBean(MealRestController.class);
     }
 
@@ -47,7 +47,7 @@ public class MealServlet extends HttpServlet {
             final Meal meal = new Meal(
                     LocalDateTime.parse(request.getParameter("dateTime")),
                     request.getParameter("description"),
-                    Integer.valueOf(request.getParameter("calories")));
+                    Integer.parseInt(request.getParameter("calories")));
 
             if (request.getParameter("id").isEmpty()) {
                 LOG.info("Create {}", meal);
@@ -98,6 +98,6 @@ public class MealServlet extends HttpServlet {
 
     private int getId(HttpServletRequest request) {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
-        return Integer.valueOf(paramId);
+        return Integer.parseInt(paramId);
     }
 }
